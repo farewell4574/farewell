@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="FoldableLinearLayout">
+        <attr name="foldedLabel" format="string" />
+        <attr name="unFoldedLabel" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="AspectRatioImageView">
+        <attr name="aspectRatio" format="float" />
+        <attr name="aspectRatioEnabled" format="boolean" />
+        <attr name="dominantMeasurement">
+            <enum name="width" value="0" />
+            <enum name="height" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <!-- Taken from Matt Allen Password Strength View
+        https://github.com/matt-allen/android-password-strength-indicator -->
+    <declare-styleable name="PasswordStrengthView">
+        <attr name="strength" format="enum">
+            <enum name="weak" value="0" />
+            <enum name="medium" value="1" />
+            <enum name="strong" value="2" />
+        </attr>
+        <attr name="showGuides" format="boolean" />
+        <attr name="color_fail" format="color" />
+        <attr name="color_weak" format="color" />
+        <attr name="color_strong" format="color" />
+    </declare-styleable>
+
+</resources>

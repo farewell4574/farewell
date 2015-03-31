@@ -1,0 +1,26 @@
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion 8
+        targetSdkVersion 19
+    }
+    
+    // Do not abort build if lint finds errors
+    lintOptions {
+        abortOnError false
+    }
+}
+
+task jar(type: Jar) {
+    dependsOn assembleRelease
+    baseName "tokenautocomplete"
+    from fileTree(dir: 'build/classes/release')
+}

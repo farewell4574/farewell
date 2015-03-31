@@ -1,0 +1,157 @@
+/*
+ * Copyright (C) 2015 Dominik Schürmann <dominik@dominikschuermann.de>
+ * Copyright (C) 2014 Vincent Breitmoser <v.breitmoser@mugenguild.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package org.sufficientlysecure.keychain.pgp;
+
+import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import org.sufficientlysecure.keychain.util.Passphrase;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+/** This parcel stores the input of one or more PgpSignEncrypt operations.
+ * All operations will use the same general paramters, differing only in
+ * input and output. Each input/output set depends on the paramters:
+ *
+ * - Each input uri is individually encrypted/signed
+ * - If a byte array is supplied, it is treated as an input before uris are processed
+ * - The number of output uris must match the number of input uris, plus one more
+ *   if there is a byte array present.
+ * - Once the output uris are empty, there must be exactly one input (uri xor bytes)
+ *   left, which will be returned in a byte array as part of the result parcel.
+ *
+ */
+public class SignEncryptParcel extends PgpSignEncryptInput implements Parcelable {
+
+    public ArrayList<Uri> mInputUris = new ArrayList<>();
+    public ArrayList<Uri> mOutputUris = new ArrayList<>();
+    public byte[] mBytes;
+
+    public SignEncryptParcel() {
+        super();
+    }
+
+    public SignEncryptParcel(Parcel src) {
+
+        // we do all of those here, so the PgpSignEncryptInput class doesn't have to be parcelable
+        mVersionHeader = src.readString();
+        mEnableAsciiArmorOutput  = src.readInt() == 1;
+        mCompressionId = src.readInt();
+        mEncryptionMasterKeyIds = src.createLongArray();
+        mSymmetricPassphrase = src.readParcelable(Passphrase.class.getClassLoader());
+        mSymmetricEncryptionAlgorithm = src.readInt();
+        mSignatureMasterKeyId = src.readLong();
+        mSignatureSubKeyId = src.readInt() == 1 ? src.readLong() : null;
+        mSignatureHashAlgorithm = src.readInt();
+        mSignaturePassphrase = src.readParcelable(Passphrase.class.getClassLoader());
+        mAdditionalEncryptId = src.readLong();
+        mNfcSignedHash = src.createByteArray();
+        mNfcCreationTimestamp = src.readInt() == 1 ? new Date(src.readLong()) : null;
+        mFailOnMissingEncryptionKeyIds = src.readInt() == 1;
+        mCharset = src.readString();
+        mCleartextSignature = src.readInt() == 1;
+        mDetachedSignature = src.readInt() == 1;
+        mHiddenRecipients = src.readInt() == 1;
+
+        mInputUris = src.createTypedArrayList(Uri.CREATOR);
+        mOutputUris = src.createTypedArrayList(Uri.CREATOR);
+        mBytes = src.createByteArray();
+
+    }
+
+    public byte[] getBytes() {
+        return mBytes;
+    }
+
+    public void setBytes(byte[] bytes) {
+        mBytes = bytes;
+    }
+
+    public List<Uri> getInputUris() {
+        return Collections.unmodifiableList(mInputUris);
+    }
+
+    public void addInputUris(Collection<Uri> inputUris) {
+        mInputUris.addAll(inputUris);
+    }
+
+    public List<Uri> getOutputUris() {
+        return Collections.unmodifiableList(mOutputUris);
+    }
+
+    public void addOutputUris(ArrayList<Uri> outputUris) {
+        mOutputUris.addAll(outputUris);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mVersionHeader);
+        dest.writeInt(mEnableAsciiArmorOutput ? 1 : 0);
+        dest.writeInt(mCompressionId);
+        dest.writeLongArray(mEncryptionMasterKeyIds);
+        dest.writeParcelable(mSymmetricPassphrase, flags);
+        dest.writeInt(mSymmetricEncryptionAlgorithm);
+        dest.writeLong(mSignatureMasterKeyId);
+        if (mSignatureSubKeyId != null) {
+            dest.writeInt(1);
+            dest.writeLong(mSignatureSubKeyId);
+        } else {
+            dest.writeInt(0);
+        }
+        dest.writeInt(mSignatureHashAlgorithm);
+        dest.writeParcelable(mSignaturePassphrase, flags);
+        dest.writeLong(mAdditionalEncryptId);
+        dest.writeByteArray(mNfcSignedHash);
+        if (mNfcCreationTimestamp != null) {
+            dest.writeInt(1);
+            dest.writeLong(mNfcCreationTimestamp.getTime());
+        } else {
+            dest.writeInt(0);
+        }
+        dest.writeInt(mFailOnMissingEncryptionKeyIds ? 1 : 0);
+        dest.writeString(mCharset);
+        dest.writeInt(mCleartextSignature ? 1 : 0);
+        dest.writeInt(mDetachedSignature ? 1 : 0);
+        dest.writeInt(mHiddenRecipients ? 1 : 0);
+
+        dest.writeTypedList(mInputUris);
+        dest.writeTypedList(mOutputUris);
+        dest.writeByteArray(mBytes);
+    }
+
+    public static final Creator<SignEncryptParcel> CREATOR = new Creator<SignEncryptParcel>() {
+        public SignEncryptParcel createFromParcel(final Parcel source) {
+            return new SignEncryptParcel(source);
+        }
+
+        public SignEncryptParcel[] newArray(final int size) {
+            return new SignEncryptParcel[size];
+        }
+    };
+
+}

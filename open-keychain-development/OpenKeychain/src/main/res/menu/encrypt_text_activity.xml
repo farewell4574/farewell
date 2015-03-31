@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/encrypt_copy"
+        android:title="@string/btn_copy_encrypted_signed"
+        android:icon="@drawable/ic_action_encrypt_copy_24dp"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/encrypt_share"
+        android:title="@string/btn_share_encrypted_signed"
+        android:icon="@drawable/ic_action_encrypt_share_24dp"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/check_use_symmetric"
+        android:title="@string/label_symmetric"
+        android:checkable="true" />
+
+    <item
+        android:id="@+id/check_enable_compression"
+        android:title="@string/label_enable_compression"
+        android:checked="true"
+        android:checkable="true" />
+
+    <!--<item-->
+        <!--android:id="@+id/check_hidden_recipients"-->
+        <!--android:title="@string/label_hidden_recipients"-->
+        <!--android:checked="false"-->
+        <!--android:checkable="true" />-->
+
+</menu>

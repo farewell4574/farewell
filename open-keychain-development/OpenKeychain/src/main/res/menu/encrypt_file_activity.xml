@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/encrypt_save"
+        android:title="@string/btn_encrypt_save_file"
+        android:icon="@drawable/ic_action_encrypt_save_24dp"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/encrypt_share"
+        android:title="@string/btn_encrypt_share_file"
+        android:icon="@drawable/ic_action_encrypt_share_24dp"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/check_use_symmetric"
+        android:title="@string/label_symmetric"
+        android:checkable="true" />
+
+    <item
+        android:id="@+id/check_delete_after_encrypt"
+        android:title="@string/label_delete_after_encryption"
+        android:checkable="true" />
+
+    <item
+        android:id="@+id/check_enable_compression"
+        android:title="@string/label_enable_compression"
+        android:checked="true"
+        android:checkable="true" />
+
+    <item
+        android:id="@+id/check_encrypt_filenames"
+        android:title="@string/label_encrypt_filenames"
+        android:checked="true"
+        android:checkable="true" />
+
+    <item
+        android:id="@+id/check_use_armor"
+        android:title="@string/label_file_ascii_armor"
+        android:checkable="true" />
+
+    <!--<item-->
+        <!--android:id="@+id/check_hidden_recipients"-->
+        <!--android:title="@string/label_hidden_recipients"-->
+        <!--android:checked="false"-->
+        <!--android:checkable="true" />-->
+
+</menu>
