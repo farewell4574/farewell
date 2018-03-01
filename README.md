@@ -1,3 +1,3 @@
 # farewell
 My first repository
-2018Äê¸üĞÂ
+2018å¹´æ›´æ–°
